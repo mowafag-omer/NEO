@@ -1,11 +1,12 @@
 import React from 'react'
+import NeoChart from './views/NeoChart'
 
 function App() {
   return (
-    <div >
-      
+    <div>
+      <NeoChart />
     </div>
-  );
+  )
 }
 
 export default App
