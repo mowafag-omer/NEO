@@ -1,3 +1,7 @@
+/* this function receive the fetched data, 
+get the suited data for the chart (name, estimated_diameter_min, estimated_diameter_max ) 
+and sorting it by average estimated diameter descending **/
+
 const configChartData = (data) =>{
   const chartData = data.near_earth_objects.map(obj => [
     obj.name,

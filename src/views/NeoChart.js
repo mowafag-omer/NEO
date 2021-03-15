@@ -4,45 +4,52 @@ import fetchNeoData from '../utils/APIsCalls/fetchNeoData'
 import configChartData from '../utils/helperFunctions/configChartData'
 
 const NeoChart = () => {
+  const [NEOdata, setNEOdata] = useState([])
+  const [isLoaded, setisLoaded] = useState(false)
+  const [error, seterror] = useState(null)
 
   useEffect(() => {
+    /** get the fetched data using "fetchNeoData", filter and sort for the chart and set it in the state */ 
     fetchNeoData()
       .then(res => {
         const chartData = configChartData(res)
-        console.log(chartData)
+        setNEOdata(chartData)
+        setisLoaded(true)
       })
-  }, [])
+      .catch((error) => seterror(error.message))
+  }, [])  
 
-  return (
-    <div>
-      <Chart
-        width={'500px'}
-        height={'300px'}
-        chartType="BarChart"
-        loader={<div>Loading Chart</div>}
-        data={[
-          ['City', '2010 Population', '2000 Population'],
-          ['New York City, NY', 8175000, 8008000],
-          ['Los Angeles, CA', 3792000, 3694000],
-          ['Chicago, IL', 2695000, 2896000],
-          ['Houston, TX', 2099000, 1953000],
-          ['Philadelphia, PA', 1526000, 1517000],
-        ]}
-        options={{
-          title: 'Population of Largest U.S. Cities',
-          chartArea: { width: '50%' },
-          hAxis: {
-            title: 'Total Population',
-            minValue: 0,
-          },
-          vAxis: {
-            title: 'City',
-          },
-        }}
-        // For tests
-        rootProps={{ 'data-testid': '1' }}
-      />
-    </div>
+  // chart data
+  const data = [
+    ["NEO Name", "Min Estimated Diameter", "Max Estimated diameter"],
+    ...NEOdata,
+  ]
+
+  //chart options
+  const options = {
+    chartArea: { width: "50%" },
+    hAxis: {
+      title: "Min Estimated Diameter (km)",
+    },
+    vAxis: {
+      title: "NEO name",
+    },
+  }
+
+  return error ? (
+    <div>{error}</div>
+  ) : !isLoaded ? (
+    <div>Loading...</div>
+  ) : (
+    <Chart
+      style={{margin: 'auto'}}
+      width={"1100px"}
+      height={"550px"}
+      chartType="BarChart"
+      loader={<div>Loading Chart</div>}
+      data={data}
+      options={options}
+    />
   )
 }
 
