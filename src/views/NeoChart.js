@@ -8,30 +8,36 @@ import Dropdown from '../components/Dropdown'
 
 const NeoChart = () => {
   const [NEOdata, setNEOdata] = useState([])
-  const [OrbitalBodiesList, setOrbitalBodiesList] = useState([])
+  const [filteredData, setfilteredData] = useState([]) // filtered data
+  const [OrbitalBodiesList, setOrbitalBodiesList] = useState([]) // orbital bodies list
   const [isLoaded, setisLoaded] = useState(false)
   const [error, seterror] = useState(null)
 
   useEffect(() => {
-    /** get the fetched data using "fetchNeoData", filter by Earth and sort for the chart and set it in the state */ 
+    /** get the fetched data using "fetchNeoData", 
+     filter by Earth and sort for the chart and set it in the state */ 
     fetchNeoData()
       .then(res => {
-        const filteredData = filterNeoData(res, 'Earth')
-        setNEOdata(configChartData(filteredData))
+        setNEOdata(res)
+        const filteredNeoData = filterNeoData(res, 'Earth')
+        setfilteredData(configChartData(filteredNeoData))
         setOrbitalBodiesList(getOrbitalBodies(res))
         setisLoaded(true)
       })
       .catch((error) => seterror(error))
     }, [])  
 
+    /**  get the value form the list in (Dropdown) component, 
+      filter the the data by user choise and update the filteredData state which is displayed the chart */
     const hangleOrbitingBody = (event) =>{
-      console.log(event.target.value)
+      const filteredData = filterNeoData(NEOdata, event.target.value)
+      setfilteredData(configChartData(filteredData))
     }
     
   // chart data
   const data = [
     ["NEO Name", "Min Estimated Diameter", "Max Estimated diameter"],
-    ...NEOdata,
+    ...filteredData,
   ]
 
   //chart options
