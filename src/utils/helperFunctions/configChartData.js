@@ -3,7 +3,7 @@ get the suited data for the chart (name, estimated_diameter_min, estimated_diame
 and sorting it by average estimated diameter descending **/
 
 const configChartData = (data) =>{
-  const chartData = data.near_earth_objects.map(obj => [
+  const chartData = data.map(obj => [
     obj.name,
     obj.estimated_diameter.kilometers.estimated_diameter_min,
     obj.estimated_diameter.kilometers.estimated_diameter_max
